@@ -1,2 +1,4 @@
-# AI-Snake
-An Artificial Intelligence snake game written in Python using the PyGame library
+# Snake AI
+Snake game written using the PyGame 
+
+Trained with PyTorch
