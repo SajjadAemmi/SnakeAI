@@ -1,14 +1,13 @@
 import pygame
-import random
-from math import sqrt
-from snake import Snake
-from apple import Apple
-from config import *
+from src.snake import Snake
+from src.apple import Apple
+from src.color import Color
+import config
 
 
 class Game:
     def __init__(self):        
-        self.display = pygame.display.set_mode((game_w, game_h))
+        self.display = pygame.display.set_mode((config.game_w, config.game_h))
         pygame.display.set_caption('snake')
         self.color = Color.white        
         pygame.font.init()
@@ -17,8 +16,8 @@ class Game:
     def play(self):
         global rows
         
-        snake = Snake()
-        apple = Apple()
+        snake = Snake(config)
+        apple = Apple(config)
 
         clock = pygame.time.Clock()
 
@@ -30,40 +29,41 @@ class Game:
             # Detect collision with apple
             if snake.x == apple.x and snake.y == apple.y:
                 snake.eat()
-                apple = Apple()
+                apple = Apple(config)
 
             # collision with body
             for part in snake.body:
                 if snake.x == part[0] and snake.y == part[1]:
-                    snake = Snake()
+                    snake = Snake(config)
                     
             direction = snake.vision(apple)
             snake.pre_direction = snake.direction
             snake.decision(direction)
        
+            # collision with wall
             if snake.collision_with_wall(snake.direction):
                 direction = (snake.direction + 1) % 4
                 if snake.collision_with_wall(direction):
                     direction = (snake.direction - 1) % 4
                     if snake.collision_with_wall(direction):
-                        snake = Snake()
+                        snake = Snake(config)
 
                 snake.direction = direction
                 
             snake.move()
      
             self.display.fill(self.color)
-            pygame.draw.rect(self.display, Color.black, ((0, 0), (game_w, game_h)), wall_offset)
+            pygame.draw.rect(self.display, Color.black, ((0, 0), (config.game_w, config.game_h)), config.wall_offset)
 
             apple.draw(self.display)
             snake.draw(self.display)
 
             score = self.font.render(f'Score: {snake.score}', True, Color.black)
-            score_rect = score.get_rect(center=(game_w / 2, game_h - 10))
+            score_rect = score.get_rect(center=(config.game_w / 2, config.game_h - 10))
             self.display.blit(score, score_rect)
 
             pygame.display.update()
-            clock.tick(fps)
+            clock.tick(config.fps)
 
 
 if __name__ == "__main__":

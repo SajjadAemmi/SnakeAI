@@ -1,17 +1,16 @@
-import pygame
+import argparse
 import random
-from math import sqrt
 from tqdm import tqdm
-from snake import Snake
-from apple import Apple
-from config import *
+from src.snake import Snake
+from src.apple import Apple
+import config
 
 
 def add_data():
-    w0 = snake.y - wall_offset  # up
-    w1 = game_w - wall_offset - snake.x  # right
-    w2 = game_h - wall_offset - snake.y  # down
-    w3 = snake.x - wall_offset  # left
+    w0 = snake.y - config.wall_offset  # up
+    w1 = config.game_w - config.wall_offset - snake.x  # right
+    w2 = config.game_h - config.wall_offset - snake.y  # down
+    w3 = snake.x - config.wall_offset  # left
 
     if snake.x == apple.x and snake.y > apple.y:
         a0 = abs(snake.x - apple.x) + abs(snake.y - apple.y)
@@ -121,26 +120,32 @@ def add_data():
     else:
         return False
 
+
 if __name__ == "__main__":
-    f = open('snake_train_dataset.csv', 'w')
+    parser = argparse.ArgumentParser(description='Snake AI')
+    parser.add_argument("--count", default=1000000, help="count of generated rows you want", type=int)
+    parser.add_argument("--dataset", default="./snake_train_dataset.csv", help="dataset path", type=str)
+    args = parser.parse_args()
+
+    f = open(args.dataset, 'w')
     f.write('w0,w1,w2,w3,a0,a01,a1,a12,a2,a23,a3,a30,b0,b01,b1,b12,b2,b23,b3,b30,direction' + '\n')
  
     rows = 0
     pbar = tqdm(total=100, position=0, leave=True)
 
-    snake = Snake()
-    apple = Apple()
+    snake = Snake(config)
+    apple = Apple(config)
 
-    while rows < 1000000:
+    while rows < args.count:
         # Detect collision with apple
         if snake.x == apple.x and snake.y == apple.y:
             snake.eat()
-            apple = Apple()
+            apple = Apple(config)
 
         # collision with body
         for part in snake.body:
             if snake.x == part[0] and snake.y == part[1]:
-                snake = Snake()
+                snake = Snake(config)
                 
         direction = snake.vision(apple)
         snake.pre_direction = snake.direction
@@ -151,7 +156,7 @@ if __name__ == "__main__":
             if snake.collision_with_wall(direction):
                 direction = (snake.direction - 1) % 4
                 if snake.collision_with_wall(direction):
-                    snake = Snake()
+                    snake = Snake(config)
 
             snake.direction = direction
 
