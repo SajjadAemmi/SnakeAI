@@ -162,8 +162,8 @@ if __name__ == "__main__":
 
         if add_data():
             rows += 1
-            pbar.update(0.0001)
-            
+            pbar.update((1/args.count)*100)
+  
         snake.move()
 
     f.close()
