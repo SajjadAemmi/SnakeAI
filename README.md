@@ -2,9 +2,9 @@
 
 [![Python application](https://github.com/SajjadAemmi/Snake-AI/actions/workflows/python-app.yml/badge.svg)](https://github.com/SajjadAemmi/Snake-AI/actions/workflows/python-app.yml)
 
-Snake game with artificial intelligence written in python using the pygame library and trained with pytorch.
+Snake game with artificial intelligence written in python using pygame library and trained with pytorch.
 
-![model arch](Screenshot.png)
+![model arch](assets/Screenshot.png)
 
 # Train
 Use the following command for generate eight neighborhoods csv dataset:
