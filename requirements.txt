@@ -1,5 +1,11 @@
-torch
-tqdm
-pygame
-numpy
 pytest
+pygame
+onnxruntime
+
+# for train
+# torch
+# numpy
+# tqdm
+
+# for export
+# onnx

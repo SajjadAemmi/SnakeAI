@@ -1,6 +1,7 @@
 # Snake AI
 
 [![Python application](https://github.com/SajjadAemmi/Snake-AI/actions/workflows/python-app.yml/badge.svg)](https://github.com/SajjadAemmi/Snake-AI/actions/workflows/python-app.yml)
+[![Python package](https://github.com/SajjadAemmi/Snake-AI/actions/workflows/python-package.yml/badge.svg)](https://github.com/SajjadAemmi/Snake-AI/actions/workflows/python-package.yml)
 
 Snake game with artificial intelligence written in python using pygame library and trained with pytorch.
 
