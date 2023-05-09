@@ -8,8 +8,8 @@ import config
 
 def add_data():
     w0 = snake.y - config.wall_offset  # up
-    w1 = config.game_w - config.wall_offset - snake.x  # right
-    w2 = config.game_h - config.wall_offset - snake.y  # down
+    w1 = config.game_width - config.wall_offset - snake.x  # right
+    w2 = config.game_height - config.wall_offset - snake.y  # down
     w3 = snake.x - config.wall_offset  # left
 
     if snake.x == apple.x and snake.y > apple.y:
@@ -146,7 +146,7 @@ if __name__ == "__main__":
         for part in snake.body:
             if snake.x == part[0] and snake.y == part[1]:
                 snake = Snake(config)
-                
+               
         direction = snake.vision(apple)
         snake.pre_direction = snake.direction
         snake.decision(direction)
@@ -163,7 +163,7 @@ if __name__ == "__main__":
         if add_data():
             rows += 1
             pbar.update((1/args.count)*100)
-  
+
         snake.move()
 
     f.close()

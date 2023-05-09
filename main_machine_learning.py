@@ -13,8 +13,8 @@ import config
 
 def get_data():
     w0 = snake.y - config.wall_offset  # up
-    w1 = config.game_w - config.wall_offset - snake.x  # right
-    w2 = config.game_h - config.wall_offset - snake.y  # down
+    w1 = config.game_width - config.wall_offset - snake.x  # right
+    w2 = config.game_height - config.wall_offset - snake.y  # down
     w3 = snake.x - config.wall_offset  # left
 
     if snake.x == apple.x and snake.y > apple.y:
@@ -121,11 +121,10 @@ def get_data():
 
 class Game:
     def __init__(self):        
-        self.display = pygame.display.set_mode((config.game_w, config.game_h))
-        pygame.display.set_caption('snake')
-        self.color = Color.white        
-        pygame.font.init()
-        self.font = pygame.font.SysFont("calibri", 10)
+        self.display = pygame.display.set_mode((config.game_width, config.game_height))
+        self.ground_color = Color.khaki
+        self.wall_color = Color.dark_khaki
+        self.font = pygame.font.SysFont("calibri", 20)
 
     def play(self):
         global snake, apple
@@ -155,21 +154,21 @@ class Game:
 
             snake.move()
      
-            self.display.fill(self.color)
-            pygame.draw.rect(self.display, Color.black, ((0, 0), (config.game_w, config.game_h)), 10)
+            self.display.fill(self.ground_color)
+            pygame.draw.rect(self.display, self.wall_color, ((0, 0), (config.game_width, config.game_height)), config.wall_offset)
 
             apple.draw(self.display)
             snake.draw(self.display)
 
-            if snake.x < 0 or snake.y < 0 or snake.x > config.game_w or snake.y > config.game_h:
+            if snake.x < 0 or snake.y < 0 or snake.x > config.game_width or snake.y > config.game_height:
                 self.play()
 
             score = self.font.render(f'Score: {snake.score}', True, Color.black)
-            score_rect = score.get_rect(center=(config.game_w / 2, config.game_h - 10))
+            score_rect = score.get_rect(center=(config.game_width / 2, config.game_height - 10))
             self.display.blit(score, score_rect)
 
             pygame.display.update()
-            clock.tick(30)  # fps
+            clock.tick(config.fps)  # fps
 
 
 if __name__ == "__main__":
@@ -179,5 +178,8 @@ if __name__ == "__main__":
 
     model = Model()
     model.load_state_dict(torch.load(args.weights, map_location=torch.device('cpu')))
+
+    pygame.display.set_caption('snake')
+    pygame.font.init()
     game = Game()
     game.play()

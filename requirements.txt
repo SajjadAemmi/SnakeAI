@@ -1,0 +1,5 @@
+torch
+tqdm
+pygame
+numpy
+pytest

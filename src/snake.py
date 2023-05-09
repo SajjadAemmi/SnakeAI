@@ -1,26 +1,27 @@
 import random
 from math import sqrt
 import pygame
-from .color import Color
+from src.color import Color
 from config import *
 
 
 class Snake:
     def __init__(self, config):
-        self.x = game_w // 2
-        self.y = game_h // 2
+        self.x = game_width // 2
+        self.y = game_height // 2
         self.body = []
         self.body_color_1 = Color.green
         self.body_color_2 = Color.green_dark
-        self.w = 10
-        self.h = 10
+        self.w = 20
+        self.h = 20
         self.pre_direction = None
         self.direction = random.randint(0, 3)
         self.x_change = 0
         self.y_change = 0
-        self.speed = 10
+        self.speed = 20
         self.score = 0
         self.config = config
+        self.border_radius = 4
 
     def eat(self):
         self.score += 1
@@ -42,74 +43,69 @@ class Snake:
             self.x_change = -1
             self.y_change = 0
 
-        self.body.append([self.x, self.y])
+        self.body.insert(0, [self.x, self.y])
         if len(self.body) > self.score:
-            del (self.body[0])
+            self.body.pop()
 
         self.x += self.x_change * self.speed
         self.y += self.y_change * self.speed
 
     def draw(self, display):
-        pygame.draw.rect(display, self.body_color_1, [self.x, self.y, self.w, self.h])
-        
+        pygame.draw.rect(display, self.body_color_1, [self.x, self.y, self.w, self.h], border_radius=self.border_radius)
         for index, item in enumerate(self.body):
             if index % 2 == 0:
-                pygame.draw.rect(display, self.body_color_1, [item[0], item[1], self.w, self.h])
+                pygame.draw.rect(display, self.body_color_2, [item[0], item[1], self.w, self.h], border_radius=self.border_radius)
             else:
-                pygame.draw.rect(display, self.body_color_2, [item[0], item[1], self.w, self.h])
+                pygame.draw.rect(display, self.body_color_1, [item[0], item[1], self.w, self.h], border_radius=self.border_radius)
 
-    def collision_with_body(self, direction):
-
+    def collision_with_body(self, direction) -> bool:
         for part in self.body:
-
             if direction == 0:
                 if abs(self.x - part[0]) < self.config.wall_offset and abs(self.y - 8 - part[1]) == 0:
                     return True
-                if abs(self.x - part[0]) == 0 and abs(self.y - 10 - part[1]) < self.config.wall_offset:
+                if abs(self.x - part[0]) == 0 and abs(self.y - 20 - part[1]) < self.config.wall_offset:
                     return True
 
             if direction == 1:
-                if abs(self.x + 10 - part[0]) < self.config.wall_offset and abs(self.y - part[1]) == 0:
+                if abs(self.x + 20 - part[0]) < self.config.wall_offset and abs(self.y - part[1]) == 0:
                     return True
-                if abs(self.x + 10 - part[0]) == 0 and abs(self.y - part[1]) < self.config.wall_offset:
+                if abs(self.x + 20 - part[0]) == 0 and abs(self.y - part[1]) < self.config.wall_offset:
                     return True
 
             if direction == 2:
-                if abs(self.x - part[0]) < self.config.wall_offset and abs(self.y + 10 - part[1]) == 0:
+                if abs(self.x - part[0]) < self.config.wall_offset and abs(self.y + 20 - part[1]) == 0:
                     return True
-                if abs(self.x - part[0]) == 0 and abs(self.y + 10 - part[1]) < self.config.wall_offset:
+                if abs(self.x - part[0]) == 0 and abs(self.y + 20 - part[1]) < self.config.wall_offset:
                     return True
 
             if direction == 3:
-                if abs(self.x - 10 - part[0]) < self.config.wall_offset and abs(self.y - part[1]) == 0:
+                if abs(self.x - 20 - part[0]) < self.config.wall_offset and abs(self.y - part[1]) == 0:
                     return True
-                if abs(self.x - 10 - part[0]) == 0 and abs(self.y - part[1]) < self.config.wall_offset:
+                if abs(self.x - 20 - part[0]) == 0 and abs(self.y - part[1]) < self.config.wall_offset:
                     return True
 
         return False
 
-    def collision_with_wall(self, direction):
-
+    def collision_with_wall(self, direction) -> bool:
         if direction == 0:
-            if self.y - 10 > self.config.wall_offset:
+            if self.y - self.config.wall_offset > 0:
                 return False
 
         elif direction == 1:
-            if self.x + 10 < game_w - self.config.wall_offset:
+            if self.x + self.config.wall_offset * 2 < game_width:
                 return False
 
         elif direction == 2:
-            if self.y + 10 < game_h - self.config.wall_offset:
+            if self.y + self.config.wall_offset * 2 < game_height:
                 return False
 
         elif direction == 3:
-            if self.x - 10 > self.config.wall_offset:
+            if self.x - self.config.wall_offset > 0:
                 return False
 
         return True
 
     def distance(self, direction, method, apple):
-
         if direction == 0:
             x = self.x
             y = self.y - 8

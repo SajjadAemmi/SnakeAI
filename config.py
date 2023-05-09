@@ -1,4 +1,4 @@
-game_w = 400
-game_h = 300
-wall_offset = 10
-fps = 30
+game_width = 800
+game_height = 600
+wall_offset = 20
+fps = 20
