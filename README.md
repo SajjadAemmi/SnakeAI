@@ -4,7 +4,7 @@
 
 Snake game with artificial intelligence written in python using pygame library and trained with pytorch.
 
-![model arch](assets/Screenshot.png)
+![screenshot](assets/Screenshot.png)
 
 # Train
 Use the following command for generate eight neighborhoods csv dataset:
